@@ -1,0 +1,10 @@
+homepage: "https://openbabel.org"
+language: c++
+primary_contact: "geoff.hutchison@gmail.com"
+sanitizers:
+  - address
+  - memory
+  - undefined
+architectures:
+  - x86_64
+  - i386
