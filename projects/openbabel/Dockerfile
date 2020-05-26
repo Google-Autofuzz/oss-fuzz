@@ -16,13 +16,13 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 MAINTAINER geoff.hutchison@gmail.com
-RUN apt-get update && apt-get install -y make cmake \
-  zlib1g-dev rapidjson-dev libeigen3-dev libxml2-dev \
-  libboost-dev \
-  libboost-program-options-dev \
-  libboost-iostreams-dev \
-  libboost-regex-dev \
-  libcairo2-dev
-RUN git clone --depth 1 https://github.com/openbabel/openbabel.git openbabel     # or use other version control
+RUN apt-get update && apt-get install -y make cmake wget \
+    zlib1g-dev rapidjson-dev libeigen3-dev libxml2-dev \
+    libboost-dev \
+    libboost-program-options-dev \
+    libboost-iostreams-dev \
+    libboost-regex-dev \
+    libcairo2-dev
+RUN git clone --depth 1 https://github.com/openbabel/openbabel.git openbabel
 WORKDIR openbabel
 COPY build.sh *.cc $SRC/

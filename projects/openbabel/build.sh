@@ -17,8 +17,10 @@
 
 # build project
 mkdir -p build && cd build
-cmake -DBUILD_SHARED=OFF -DBUILD_MIXED=OFF -DCMAKE_BUILD_TYPE=Debug ..
-make -j$(nproc) all
+# cmake -DBUILD_SHARED=OFF -DBUILD_MIXED=OFF -DCMAKE_BUILD_TYPE=Debug ..
+cmake -DBUILD_SHARED=OFF ..
+make -j2
+make install
 
 find . -name "*.a"
 # build fuzzers
