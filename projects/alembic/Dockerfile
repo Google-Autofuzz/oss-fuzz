@@ -24,10 +24,16 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5
     chmod +x cmake-3.14.5-Linux-x86_64.sh; \
     ./cmake-3.14.5-Linux-x86_64.sh --skip-license --prefix="/usr/local"
 
-# Install OpenEXR
 RUN wget http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.0.tar.gz
 RUN tar xvfz ilmbase-2.2.0.tar.gz && cd ilmbase-2.2.0 && ./configure && make -j6 install
-RUN git clone --depth 1 https://github.com/AcademySoftwareFoundation/openexr.git
+
+RUN wget http://download.savannah.nongnu.org/releases/openexr/openexr-2.2.0.tar.gz
+RUN tar xvfz openexr-2.2.0.tar.gz && cd openexr-2.2.0 && ./configure --disable-ilmbasetest && make -j6 install
+
+# Install OpenEXR
+#RUN wget http://download.savannah.nongnu.org/releases/openexr/ilmbase-2.2.0.tar.gz
+#RUN tar xvfz ilmbase-2.2.0.tar.gz && cd ilmbase-2.2.0 && ./configure && make -j6 install
+#RUN git clone --depth 1 https://github.com/AcademySoftwareFoundation/openexr.git
 
 RUN git clone --depth 1 https://github.com/alembic/alembic
 # WORKDIR alembic

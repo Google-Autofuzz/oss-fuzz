@@ -16,28 +16,29 @@
 ################################################################################
 
 # build openexr for alembic
-cd openexr
-cmake .
-make -j$(nproc)
-make install
-cd ..
+# cd openexr
+# cmake .
+# make -j$(nproc)
+# make install
+# cd ..
 
 # build alembic
 cd alembic
 mkdir build
 cd build
 cmake .. -DALEMBIC_SHARED_LIBS=OFF -DILMBASE_INCLUDE_DIR=/usr/local/include/OpenEXR \
--DILMBASE_ROOT=/usr/local/lib64
-make clean
+-DILMBASE_ROOT=/usr/lib64/OpenEXR
 make -j$(nproc)
 make install
-cd ..
-
-find . -name "*.a"
+cd ../..
+# ls
+# find . -name "*.a"
+find . -name "half.h"
 
 for fuzzers in $(find $SRC -name '*_fuzzer.cc'); do
   fuzz_basename=$(basename -s .cc $fuzzers)
-  $CXX $CXXFLAGS -std=c++11 $fuzzers ./build/lib/Alembic/libAlembic.a \
+  $CXX $CXXFLAGS -std=c++11 -I. -I../alembic \
+  $fuzzers ./alembic/build/lib/Alembic/libAlembic.a \
   $LIB_FUZZING_ENGINE  \
   -o $OUT/$fuzz_basename
 done
