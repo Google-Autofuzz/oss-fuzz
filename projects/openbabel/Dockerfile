@@ -25,4 +25,4 @@ RUN apt-get update && apt-get install -y make cmake wget \
     libcairo2-dev
 RUN git clone --depth 1 https://github.com/openbabel/openbabel.git openbabel
 WORKDIR openbabel
-COPY build.sh *.cc $SRC/
+COPY build.sh *.h *.cc $SRC/

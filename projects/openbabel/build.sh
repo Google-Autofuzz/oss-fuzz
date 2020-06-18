@@ -16,14 +16,18 @@
 ################################################################################
 
 # build project
-mkdir -p build && cd build
-# cmake -DBUILD_SHARED=OFF -DBUILD_MIXED=OFF -DCMAKE_BUILD_TYPE=Debug ..
-cmake -DBUILD_SHARED=OFF ..
-make -j2
+cmake -DBUILD_SHARED=OFF -DBUILD_MIXED=ON
+make -j$(nproc)
 make install
 
 find . -name "*.a"
+find . -name "babelconfig.h"
+ls
+
 # build fuzzers
-# $CXX $CXXFLAGS -std=c++11 -Iinclude \
-#     /path/to/name_of_fuzzer.cc -o $OUT/name_of_fuzzer \
-#     $LIB_FUZZING_ENGINE /path/to/library.a
+for fuzzers in $(find $SRC -name '*_fuzzer.cc'); do
+  fuzz_basename=$(basename -s .cc $fuzzers)
+  $CXX $CXXFLAGS -std=c++11 -I. -Iinclude/ -Isrc/ \
+  $fuzzers $LIB_FUZZING_ENGINE ./src/libopenbabel.a \
+  -o $OUT/$fuzz_basename
+done
