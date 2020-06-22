@@ -27,7 +27,7 @@ ls
 # build fuzzers
 for fuzzers in $(find $SRC -name '*_fuzzer.cc'); do
   fuzz_basename=$(basename -s .cc $fuzzers)
-  $CXX $CXXFLAGS -std=c++11 -I. -Iinclude/ -Isrc/ \
+  $CXX $CXXFLAGS -std=c++11 -I. -Iinclude/ \
   $fuzzers $LIB_FUZZING_ENGINE ./src/libopenbabel.a \
   -o $OUT/$fuzz_basename
 done
