@@ -18,8 +18,8 @@ FROM gcr.io/oss-fuzz-base/base-builder
 MAINTAINER TODO@email.com
 RUN apt-get update && apt-get install -y make autoconf automake libtool build-essential checkinstall git libtool-bin
 
-RUN git clone --depth 1 https://github.com/libimobiledevice/libplist.git libplist
-RUN git clone --depth 1 https://github.com/libimobiledevice/libusbmuxd.git libusbmuxd
-RUN git clone --depth 1 https://github.com/libimobiledevice/libimobiledevice.git libimobiledevice
+RUN git clone --depth 1 https://github.com/libimobiledevice/libplist.git
+RUN git clone --depth 1 https://github.com/libimobiledevice/libusbmuxd.git
+RUN git clone --depth 1 https://github.com/libimobiledevice/libimobiledevice.git
 WORKDIR libimobiledevice
 COPY build.sh *.c $SRC/

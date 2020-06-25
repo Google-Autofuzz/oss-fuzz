@@ -16,20 +16,22 @@
 ################################################################################
 
 # build libplist
-pushd $SRC/libplist
+cd $SRC
+cd libplist
 ./autogen.sh
 make
 make install
-popd
 
 # build libusbmuxd
-pushd $SRC/libusbmuxd
+cd $SRC
+cd libusbmuxd
 ./autogen.sh
 make
 make install
-popd
 
-# build libimobiledevice
+# build libimobiledvice
+cd $SRC
+cd libimobiledvice
 ./autogen.sh --disable-openssl
 make
 make install
