@@ -15,26 +15,32 @@
 #
 ################################################################################
 
-# build libplist
-cd $SRC
-cd libplist
-./autogen.sh
-make
+# Create a directory for instrumented dependencies.
+MOB_DEPS=${SRC}/dep
+mkdir -p $MOB_DEPS
+
+# build libplist with proper instrumentation.
+cd ${SRC}/libplist
+sh ./autogen.sh --without-cython --enable-debug
+./configure --prefix=${MOB_DEPS}
+make -j$(nproc) clean
+make -j$(nproc) all
 make install
 
-# build libusbmuxd
-cd $SRC
-cd libusbmuxd
-./autogen.sh
-make
+# # build libusbmuxd
+cd ${SRC}/libusbmuxd
+sh ./autogen.sh
+./configure --prefix=${MOB_DEPS}
+make -j$(nproc) clean
+make -j$(nproc) all
 make install
 
-# build libimobiledvice
-cd $SRC
-cd libimobiledvice
-./autogen.sh --disable-openssl
-make
-make install
+# # build libimobiledvice
+cd ${SRC}/libimobiledvice
+# cd libimobiledvice
+# ./autogen.sh --disable-openssl
+# make -j$(nproc) clean
+# make -j$(nproc) all
 
 find . -name "*.a"
 
