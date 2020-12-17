@@ -1,4 +1,4 @@
-# Copyright 2020 Google LLC
+# Copyright 2020 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +14,10 @@
 #
 ################################################################################
 
-cd $SRC/LPM
-export PKG_CONFIG_PATH=$PWD:$PWD/external.protobuf/lib/pkgconfig/
-export PATH=$PWD/external.protobuf/bin:$PATH
+FROM gcr.io/oss-fuzz-base/base-builder
+RUN apt-get update && apt-get install -y cmake
 
-cd $SRC/rocksdb
-export FUZZ_ENV=ossfuzz
-export CC=$CXX
-make static_lib
-
-cd fuzz
-make db_fuzzer
-make db_map_fuzzer
-
-cp *_fuzzer $OUT/
+RUN git clone --depth 1 https://github.com/ninja-build/ninja
+WORKDIR ninja
+RUN mv $SRC/ninja/misc/oss-fuzz/build.sh $SRC/
+RUN mv $SRC/ninja/misc/oss-fuzz/sample_ninja_build $SRC/
