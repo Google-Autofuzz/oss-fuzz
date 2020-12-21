@@ -1,4 +1,6 @@
-# Copyright 2020 Google Inc.
+#!/bin/bash -eu
+
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +16,14 @@
 #
 ################################################################################
 
-FROM gcr.io/oss-fuzz-base/base-builder
+autoreconf -f -i
+./configure --enable-static --disable-man --disable-glib
+make clean
 
+make
 
-RUN apt-get update && \
-    apt-get install -y pkg-config make automake libtool wget
+zip $OUT/fuzz_mdb_seed_corpus.zip test/data/*.mdb test/data/*.accdb
 
-RUN git clone --depth 1 https://gitlab.freedesktop.org/libspectre/libspectre.git
-
-RUN wget -O $SRC/libspectre/ghostscript-9.53.3.tar.gz https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9533/ghostscript-9.53.3.tar.gz
-RUN tar xvzf $SRC/libspectre/ghostscript-9.53.3.tar.gz --directory $SRC/libspectre/
-RUN mv $SRC/libspectre/ghostscript-9.53.3 $SRC/libspectre/ghostscript
-
-WORKDIR $SRC/libspectre/
-COPY build.sh $SRC/
+cd src/fuzz
+make fuzz_mdb
+cp fuzz_mdb $OUT/fuzz_mdb

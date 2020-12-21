@@ -1,3 +1,4 @@
+#!/bin/bash -eu
 # Copyright 2020 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +15,11 @@
 #
 ################################################################################
 
-FROM gcr.io/oss-fuzz-base/base-builder
+make USE_SSL=0
+mv fuzzing/format_command_fuzzer.c .
 
+$CC $CFLAGS -std=c99 -pedantic -c -O3 -fPIC \
+	format_command_fuzzer.c -o format_command_fuzzer.o
 
-RUN apt-get update && \
-    apt-get install -y pkg-config make automake libtool wget
-
-RUN git clone --depth 1 https://gitlab.freedesktop.org/libspectre/libspectre.git
-
-RUN wget -O $SRC/libspectre/ghostscript-9.53.3.tar.gz https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9533/ghostscript-9.53.3.tar.gz
-RUN tar xvzf $SRC/libspectre/ghostscript-9.53.3.tar.gz --directory $SRC/libspectre/
-RUN mv $SRC/libspectre/ghostscript-9.53.3 $SRC/libspectre/ghostscript
-
-WORKDIR $SRC/libspectre/
-COPY build.sh $SRC/
+$CC $CFLAGS -O3 -fPIC $LIB_FUZZING_ENGINE format_command_fuzzer.o \
+	-o $OUT/format_command_fuzzer libhiredis.a
